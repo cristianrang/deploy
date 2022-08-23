@@ -19,6 +19,7 @@ services:
       - VIRTUAL_HOST=portal.midominio.com
     volumes:
     - /storage/nginx/portal:/usr/share/nginx
+  #ERP
   erp:
     image: httpd
     container_name: ERP
