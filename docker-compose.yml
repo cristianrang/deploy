@@ -3,7 +3,7 @@ version: '3.1'
 services:
 
   reverse-proxy:
-    image: jwilder/nginx-proxy:alpine
+    image: nginxproxy/nginx-proxy:alpine
     container_name: Reverse-Proxy
     restart: always
     ports:
@@ -18,28 +18,30 @@ services:
       - /var/run/docker.sock:/tmp/docker.sock:ro
   portal:
     image: nginx
-    container_name: Portal
     restart: always
     environment:
      - VIRTUAL_HOST=apps-cerc.ddns.net
+     - VIRTUAL_PATH=/
     volumes:
     - /volumes/www/portal:/usr/share/nginx/html:ro
 
      #Factura
   factura:
     image: httpd
-    container_name: Factura
     restart: always
     environment:
       - VIRTUAL_HOST=apps-cerc.ddns.net
+      - VIRTUAL_PATH=/factura
+      - VIRTUAL_DEST=/
     volumes:
     - /volumes/www/factura:/usr/local/apache2/htdocs
   #ERP
   erp:
     image: httpd
-    container_name: ERP
     restart: always
     environment:
       - VIRTUAL_HOST=apps-cerc.ddns.net
+      - VIRTUAL_PATH=/erp
+      - VIRTUAL_DEST=/
     volumes:
     - /volumes/www/erp:/usr/local/apache2/htdocs
