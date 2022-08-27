@@ -9,6 +9,8 @@ services:
     ports:
       - 80:80
       - 443:443
+    environment:
+      - VIRTUAL_HOST=apps-cerc.ddns.net
     volumes:
       - /volumes/nginx/certs:/etc/nginx/certs:ro
       - /volumes/nginx/vhostd:/etc/nginx/vhost.d
@@ -18,8 +20,8 @@ services:
     image: nginx
     container_name: Portal
     restart: always
-    environment:
-      - VIRTUAL_HOST=portal-cerc.ddns.net
+    #environment:
+    #  - VIRTUAL_HOST=portal-cerc.ddns.net
     volumes:
     - /volumes/www/portal:/usr/share/nginx/html:ro
 
@@ -28,8 +30,8 @@ services:
     image: httpd
     container_name: Factura
     restart: always
-    environment:
-      - VIRTUAL_HOST=factura-cerc.ddns.net
+    #environment:
+    #  - VIRTUAL_HOST=factura-cerc.ddns.net
     volumes:
     - /volumes/www/factura:/usr/local/apache2/htdocs
   #ERP
@@ -37,7 +39,7 @@ services:
     image: httpd
     container_name: ERP
     restart: always
-    environment:
-      - VIRTUAL_HOST=erp-cerc.ddns.net
+    #environment:
+    #  - VIRTUAL_HOST=erp-cerc.ddns.net
     volumes:
     - /volumes/www/erp:/usr/local/apache2/htdocs
