@@ -1,5 +1,5 @@
 version: '3.1'
-#Servicios
+# Servicios
 services:
 
   reverse-proxy:
@@ -9,38 +9,61 @@ services:
     ports:
       - 80:80
       - 443:443
-    #environment:
-    #  - VIRTUAL_HOST=apps-cerc.ddns.net
+    environment:
+      - LETSENCRYPT_HOST=apps2-cerc.ddns.net
+      - LETSENCRYPT_EMAIL=celuneyrc@hotmail.com
     volumes:
       - /volumes/nginx/certs:/etc/nginx/certs:ro
       - /volumes/nginx/vhostd:/etc/nginx/vhost.d
+      - /volumes/nginx/html:/usr/share/nginx/html:rw
       - /var/run/docker.sock:/tmp/docker.sock:ro
+
+  lets-encrypt:
+    image: jrcs/letsencrypt-nginx-proxy-companion
+    container_name: 'Lets-Encrypt'
+    restart: always
+    environment:
+      - NGINX_PROXY_CONTAINER=Reverse-Proxy
+      - VIRTUAL_HOST=apps2-cerc.ddns.net
+      - VIRTUAL_PATH=/.well-known
+    volumes:
+      - /volumes/nginx/certs:/etc/nginx/certs
+      - /volumes/nginx/vhostd:/etc/nginx/vhost.d
+      - /volumes/nginx/html:/usr/share/nginx/html:rw
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+
   portal:
     image: nginx
     restart: always
     environment:
-     - VIRTUAL_HOST=apps-cerc.ddns.net
-     - VIRTUAL_PATH=/
+      - VIRTUAL_HOST=apps2-cerc.ddns.net
+      - VIRTUAL_PATH=/
+      - VIRTUAL_DEST=/
+      - LETSENCRYPT_HOST=apps2-cerc.ddns.net
+      - LETSENCRYPT_EMAIL=celuneyrc@hotmail.com
     volumes:
-    - /volumes/www/portal:/usr/share/nginx/html:ro
+      - /volumes/www/portal:/usr/share/nginx/html:ro
 
-     #Factura
   factura:
     image: nginx
     restart: always
     environment:
-      - VIRTUAL_HOST=apps-cerc.ddns.net
-      - VIRTUAL_PATH=/factura
+      - VIRTUAL_HOST=apps2-cerc.ddns.net
+      - VIRTUAL_PATH=/facturas
       - VIRTUAL_DEST=/
+      - LETSENCRYPT_HOST=apps2-cerc.ddns.net
+      - LETSENCRYPT_EMAIL=celuneyrc@hotmail.com
     volumes:
-    - /volumes/www/factura:/usr/local/apache2/htdocs
-  #ERP
+      - /volumes/www/factura:/usr/share/nginx/html:ro
+
   erp:
     image: httpd
     restart: always
     environment:
-      - VIRTUAL_HOST=apps-cerc.ddns.net
+      - VIRTUAL_HOST=apps2-cerc.ddns.net
       - VIRTUAL_PATH=/erp
       - VIRTUAL_DEST=/
+      - LETSENCRYPT_HOST=apps2-cerc.ddns.net
+      - LETSENCRYPT_EMAIL=celuneyrc@hotmail.com
     volumes:
-    - /volumes/www/erp:/usr/local/apache2/htdocs
+      - /volumes/www/erp:/usr/local/apache2/htdocs
