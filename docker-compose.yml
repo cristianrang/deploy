@@ -12,7 +12,7 @@ services:
     volumes:
       - /volumes/nginx/certs:/etc/nginx/certs:ro
       - /volumes/nginx/vhostd:/etc/nginx/vhost.d
-      - /volumes/nginx/config/settings.conf:/etc/nginx/conf.d/custom_settings.conf:ro
+      - /volumes/deploy/nginx/settings.conf:/etc/nginx/conf.d/custom_settings.conf:ro
       - /var/run/docker.sock:/tmp/docker.sock:ro
   portal:
     image: nginx
